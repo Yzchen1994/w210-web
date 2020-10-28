@@ -97,7 +97,38 @@ function getListOfPoints(routeResponse) {
 }
 
 function fetchApiAccidentLocations(startLocation, endLocation) {
-
+  axios.get('http://18.223.153.4:5000/api/getAccidentLocations', {
+    params: {
+      startLocation: startLocation,
+      endLocation: endLocation
+    }
+  })
+      .then(response => {
+        console.log(`success getting API`);
+        console.log(response.data);
+        if (response.data) {
+          let markerPoints = [];
+          console.log(response.data.map((data) => !!data.prediction))
+          response.data.forEach(data => {
+            if (!!data.prediction) {
+              const cityCircle = new google.maps.Circle({
+                strokeColor: "#FF0000",
+                strokeOpacity: 0.8,
+                strokeWeight: 2,
+                fillColor: "#FF0000",
+                fillOpacity: 0.35,
+                map,
+                center: {
+                  lat: data.Start_Lat,
+                  lng: data.Start_Lng
+                },
+                radius: 10,
+              });
+            }
+          })
+        }
+      })
+      .catch(error => console.error(error));
 }
 
 
