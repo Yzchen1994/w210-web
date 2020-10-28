@@ -4,6 +4,8 @@
 // locate you.
 let map, infoWindow;
 
+let routeResponse;
+
 function initMap() {
   const directionsService = new google.maps.DirectionsService();
   const directionsRenderer = new google.maps.DirectionsRenderer();
@@ -46,6 +48,7 @@ function initMap() {
     console.log(startLocation);
     console.log(endLocation);
     calculateAndDisplayRoute(directionsService, directionsRenderer, startLocation, endLocation);
+    fetchApiAccidentLocations(startLocation, endLocation);
   });
 }
 
@@ -62,6 +65,10 @@ function calculateAndDisplayRoute(directionsService, directionsRenderer, startLo
     },
     (response, status) => {
       if (status === "OK") {
+        console.log('Route response: ');
+        console.log(response);
+        getListOfPoints(response);
+        routeResponse = response;
         directionsRenderer.setDirections(response);
       } else {
         window.alert("Directions request failed due to " + status);
@@ -78,6 +85,19 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
       : "Error: Your browser doesn't support geolocation."
   );
   infoWindow.open(map);
+}
+
+function getListOfPoints(routeResponse) {
+  console.log('getListOfPoints');
+  let points = [];
+  routeResponse.routes[0].overview_path.forEach((path) => {
+    points.push({'lat': path.lat(), 'lng': path.lng()})
+  });
+  console.log(JSON.stringify(points));
+}
+
+function fetchApiAccidentLocations(startLocation, endLocation) {
+
 }
 
 
