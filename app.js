@@ -11,7 +11,7 @@ function initMap() {
   const directionsRenderer = new google.maps.DirectionsRenderer();
   map = new google.maps.Map(document.getElementById("map"), {
     center: { lat: 40.728657, lng: -74.001048 },
-    zoom: 6
+    zoom: 12
   });
   infoWindow = new google.maps.InfoWindow();
   directionsRenderer.setMap(map);
