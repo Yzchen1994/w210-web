@@ -6,6 +6,8 @@ let map, infoWindow;
 
 let routeResponse;
 
+let circles = [];
+
 function initMap() {
   const directionsService = new google.maps.DirectionsService();
   const directionsRenderer = new google.maps.DirectionsRenderer();
@@ -107,6 +109,7 @@ function getListOfPoints(routeResponse) {
 }
 
 function fetchApiAccidentLocations(startLocation, endLocation) {
+  removeAllCircles();
   axios.get('http://18.223.153.4:5000/api/getAccidentLocations', {
     params: {
       startLocation: startLocation,
@@ -134,11 +137,19 @@ function fetchApiAccidentLocations(startLocation, endLocation) {
                 },
                 radius: 10,
               });
+              circles.push(cityCircle);
             }
           })
         }
       })
       .catch(error => console.error(error));
+}
+
+function removeAllCircles() {
+  for (let i in circles) {
+    circles[i].setMap(null);
+  }
+  circles = [];
 }
 
 
