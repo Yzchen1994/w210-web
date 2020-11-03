@@ -50,6 +50,16 @@ function initMap() {
     calculateAndDisplayRoute(directionsService, directionsRenderer, startLocation, endLocation);
     fetchApiAccidentLocations(startLocation, endLocation);
   });
+
+  document.getElementById('test-button').addEventListener('click', function () {
+    // Prefill start and end location
+    const testStartLocation = 'Wall Street';
+    const testEndLocation = 'Times Square';
+    document.getElementById('start-location').value = testStartLocation;
+    document.getElementById('end-location').value = testEndLocation;
+    calculateAndDisplayRoute(directionsService, directionsRenderer, testStartLocation, testEndLocation);
+    fetchApiAccidentLocations(testStartLocation, testEndLocation);
+  });
 }
 
 function calculateAndDisplayRoute(directionsService, directionsRenderer, startLocation, endLocation) {
