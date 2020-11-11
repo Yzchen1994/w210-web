@@ -7,6 +7,8 @@ let map, infoWindow;
 let routeResponse;
 
 let circles = [];
+let accidentPoints = [];
+let routePoints = [];
 
 function initMap() {
   const directionsService = new google.maps.DirectionsService();
@@ -59,12 +61,12 @@ function initMap() {
     const testEndLocation = 'Times Square';
     document.getElementById('start-location').value = testStartLocation;
     document.getElementById('end-location').value = testEndLocation;
-    calculateAndDisplayRoute(directionsService, directionsRenderer, testStartLocation, testEndLocation);
+    calculateAndDisplayRoute(directionsService, directionsRenderer, testStartLocation, testEndLocation, true);
     fetchApiAccidentLocations(testStartLocation, testEndLocation);
   });
 }
 
-function calculateAndDisplayRoute(directionsService, directionsRenderer, startLocation, endLocation) {
+function calculateAndDisplayRoute(directionsService, directionsRenderer, startLocation, endLocation, simulate = false) {
   directionsService.route(
     {
       origin: {
@@ -82,6 +84,11 @@ function calculateAndDisplayRoute(directionsService, directionsRenderer, startLo
         getListOfPoints(response);
         routeResponse = response;
         directionsRenderer.setDirections(response);
+
+        if (simulate) {
+          navigateSimulation();
+        }
+
       } else {
         window.alert("Directions request failed due to " + status);
       }
@@ -100,12 +107,21 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
 }
 
 function getListOfPoints(routeResponse) {
-  console.log('getListOfPoints');
-  let points = [];
+  routePoints = [];
   routeResponse.routes[0].overview_path.forEach((path) => {
-    points.push({'lat': path.lat(), 'lng': path.lng()})
+    routePoints.push({'lat': path.lat(), 'lng': path.lng()})
   });
-  console.log(JSON.stringify(points));
+  console.log(JSON.stringify(routePoints));
+}
+
+function navigateSimulation() {
+  console.log('simulation...');
+  routePoints.forEach((routePoint, i) => {
+    setTimeout(() => {
+      console.log(routePoint.lat, routePoint.lng);
+      //todo set the point to map and calculate if it's too close to any accident point. 
+    }, i * 2000);
+  });
 }
 
 function fetchApiAccidentLocations(startLocation, endLocation) {
@@ -121,7 +137,8 @@ function fetchApiAccidentLocations(startLocation, endLocation) {
         console.log(response.data);
         if (response.data) {
           let markerPoints = [];
-          console.log(response.data.map((data) => !!data.prediction))
+          accidentPoints = response.data.map((data) => !!data.prediction);
+          console.log('accidentPoints', accidentPoints);
           response.data.forEach(data => {
             if (!!data.prediction) {
               const cityCircle = new google.maps.Circle({
