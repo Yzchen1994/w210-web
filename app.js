@@ -138,7 +138,13 @@ function fetchApiAccidentLocations(startLocation, endLocation) {
         console.log(response.data);
         if (response.data) {
           let markerPoints = [];
-          accidentPoints = response.data.map((data) => !!data.prediction);
+          accidentPoints = response.data.map((data) => {
+            return {
+              'lat': data.Start_Lat,
+              'lng': data.Start_Lng,
+              'isAccident': !!data.prediction
+            }
+          });
           console.log('accidentPoints', accidentPoints);
           response.data.forEach(data => {
             if (!!data.prediction) {
