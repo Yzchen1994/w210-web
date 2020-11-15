@@ -116,12 +116,12 @@ function getListOfPoints(routeResponse) {
 
 function navigateSimulation() {
   console.log('simulation...');
-  map.setZoom(18);
   routePoints.forEach((routePoint, i) => {
     setTimeout(() => {
       console.log(routePoint.lat, routePoint.lng);
       deleteMarkers();
       addMarker(routePoint);
+      map.setZoom(18);
       map.setCenter(routePoint);
       if (pointCloseToAccident(routePoint.lat, routePoint.lng)) {
         console.log('Close to accident! Current lat lng: ');
