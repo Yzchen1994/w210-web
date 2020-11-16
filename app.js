@@ -136,7 +136,7 @@ function navigateSimulation() {
         handleAlert(false)
       }
       //todo set the point to map and calculate if it's too close to any accident point.
-    }, i * 500));
+    }, i * 1500));
   });
 }
 
