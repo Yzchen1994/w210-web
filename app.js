@@ -67,6 +67,11 @@ function initMap() {
     calculateAndDisplayRoute(directionsService, directionsRenderer, startLocation, endLocation, true);
     fetchApiAccidentLocations(startLocation, endLocation);
   });
+
+  document.getElementById('stop-button').addEventListener('click', function () {
+    stopNavigationSimulation();
+    map.setZoom(12);
+  });
 }
 
 function calculateAndDisplayRoute(directionsService, directionsRenderer, startLocation, endLocation, simulate = false) {
@@ -139,10 +144,9 @@ function navigateSimulation() {
 }
 
 function stopNavigationSimulation() {
-  //isSimulationOngoing = false;
   routePoints = [];
+  deleteMarkers();
   timers.forEach(timer => {clearTimeout(timer)});
-  //setTimeout(() => {}, 2000);
 }
 
 function pointCloseToAccident(lat, lng) {
