@@ -105,12 +105,9 @@ function calculateAndDisplayRoute(directionsService, directionsRenderer, startLo
 }
 
 function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-  infoWindow.setPosition(pos);
-  infoWindow.setContent(
-    browserHasGeolocation
+  console.log(browserHasGeolocation
       ? "Error: The Geolocation service failed."
-      : "Error: Your browser doesn't support geolocation."
-  );
+      : "Error: Your browser doesn't support geolocation.");
   infoWindow.open(map);
 }
 
