@@ -8,6 +8,7 @@ let markers = [];
 let routeResponse;
 let accidentPoints = [];
 let routePoints = [];
+let isSimulationOngoing = false;
 const THRESHOLD = 0.03;
 
 function initMap() {
@@ -59,9 +60,10 @@ function initMap() {
   });
 
   document.getElementById('test-button').addEventListener('click', function () {
+    //stopNavigationSimulation();
     const startLocation = document.getElementById('start-location').value;
     const endLocation = document.getElementById('end-location').value;
-    calculateAndDisplayRoute(directionsService, directionsRenderer, testStartLocation, testEndLocation, true);
+    calculateAndDisplayRoute(directionsService, directionsRenderer, startLocation, endLocation, true);
     fetchApiAccidentLocations(startLocation, endLocation);
   });
 }
@@ -133,6 +135,12 @@ function navigateSimulation() {
       //todo set the point to map and calculate if it's too close to any accident point.
     }, i * 500);
   });
+}
+
+function stopNavigationSimulation() {
+  isSimulationOngoing = false;
+  routePoints = [];
+  setTimeout(() => {}, 2000);
 }
 
 function pointCloseToAccident(lat, lng) {
