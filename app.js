@@ -197,7 +197,7 @@ function fetchApiAccidentLocations(startLocation, endLocation) {
                   lat: data.Start_Lat,
                   lng: data.Start_Lng
                 },
-                radius: 10,
+                radius: 50,
               });
               circles.push(cityCircle);
             }
