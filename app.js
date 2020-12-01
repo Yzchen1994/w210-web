@@ -11,6 +11,7 @@ let routePoints = [];
 let isSimulationOngoing = false;
 const THRESHOLD = 0.03;
 let timers = [];
+const audio = new Audio('alert.mp3');
 
 function initMap() {
   const directionsService = new google.maps.DirectionsService();
@@ -151,6 +152,7 @@ function pointCloseToAccident(lat, lng) {
 
 function handleAlert(show) {
   if (show) {
+    audio.play();
     document.getElementById('accident-alert').style.visibility = 'visible';
   } else {
     document.getElementById('accident-alert').style.visibility = 'hidden';
