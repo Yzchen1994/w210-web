@@ -47,12 +47,6 @@ function initMap() {
     handleLocationError(false, infoWindow, map.getCenter());
   }
 
-  // Prefill start and end location
-  const testStartLocation = 'Wall Street';
-  const testEndLocation = 'Astoria Park';
-  document.getElementById('start-location').value = testStartLocation;
-  document.getElementById('end-location').value = testEndLocation;
-
   document.getElementById('submit-button').addEventListener('click', function () {
     const startLocation = document.getElementById('start-location').value;
     const endLocation = document.getElementById('end-location').value;
