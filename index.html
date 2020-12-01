@@ -18,20 +18,29 @@
   </head>
   <body>
     <div id="input-box container">
-      <div class="row">
+      <div class="row p-2">
         <div class="col">
-          <input type="text" class="form-control" placeholder="Start Location" id="start-location">
+          <div class="row py-1">
+            <div class="col">
+              <input type="text" class="form-control" placeholder="Start Location" id="start-location">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <input type="text" class="form-control" placeholder="Destination" id="end-location">
+            </div>
+          </div>
         </div>
+
         <div class="col">
-          <input type="text" class="form-control" placeholder="Destination" id="end-location">
+          <div class="row"></div>
+          <div class="row py-1">
+            <button type="button" class="btn btn-primary mx-1" id="submit-button">Get Route</button>
+            <button type="button" class="btn btn-success mx-1" id="test-button">Start Simulation</button>
+            <button type="button" class="btn btn-danger mx-1" id="stop-button">Stop Simulation</button>
+          </div>
         </div>
       </div>
-
-      <button type="button" class="btn btn-primary" id="submit-button">Get Route</button>
-
-      <button type="button" class="btn btn-success" id="test-button">Start Simulation</button>
-
-      <button type="button" class="btn btn-danger" id="stop-button">Stop Simulation</button>
     </div>
 
     <div id="wrapper">
