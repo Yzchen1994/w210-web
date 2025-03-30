@@ -1,4 +1,4 @@
-const BASE_API = 'localhost:5000';
+const BASE_API = 'http://127.0.0.1:5000';
 let map, infoWindow;
 
 // variables for Google Maps drawings.
