@@ -1,3 +1,4 @@
+const BASE_API = 'localhost:5000';
 let map, infoWindow;
 
 // variables for Google Maps drawings.
@@ -101,15 +102,15 @@ function calculateAndDisplayRoute(directionsService, directionsRenderer, startLo
 
 function handleLocationError(browserHasGeolocation, infoWindow, pos) {
   console.log(browserHasGeolocation
-      ? "Error: The Geolocation service failed."
-      : "Error: Your browser doesn't support geolocation.");
+    ? "Error: The Geolocation service failed."
+    : "Error: Your browser doesn't support geolocation.");
   infoWindow.open(map);
 }
 
 function getListOfPoints(routeResponse) {
   routePoints = [];
   routeResponse.routes[0].overview_path.forEach((path) => {
-    routePoints.push({'lat': path.lat(), 'lng': path.lng()})
+    routePoints.push({ 'lat': path.lat(), 'lng': path.lng() })
   });
   console.log(JSON.stringify(routePoints));
 }
@@ -138,7 +139,7 @@ function navigateSimulation() {
 function stopNavigationSimulation() {
   routePoints = [];
   deleteMarkers();
-  timers.forEach(timer => {clearTimeout(timer)});
+  timers.forEach(timer => { clearTimeout(timer) });
 }
 
 function pointCloseToAccident(lat, lng) {
@@ -161,46 +162,46 @@ function handleAlert(show) {
 
 function fetchApiAccidentLocations(startLocation, endLocation) {
   removeAllCircles();
-  axios.get('http://18.223.153.4:5000/api/getAccidentLocations', {
+  axios.get(`${BASE_API}/api/getAccidentLocations`, {
     params: {
       startLocation: startLocation,
       endLocation: endLocation
     }
   })
-      .then(response => {
-        console.log(`success getting API`);
-        console.log(response.data);
-        if (response.data) {
-          let markerPoints = [];
-          accidentPoints = response.data.map((data) => {
-            return {
-              'lat': data.Start_Lat,
-              'lng': data.Start_Lng,
-              'isAccident': !!data.prediction
-            }
-          });
-          console.log('accidentPoints', accidentPoints);
-          response.data.forEach(data => {
-            if (!!data.prediction) {
-              const cityCircle = new google.maps.Circle({
-                strokeColor: "#FF0000",
-                strokeOpacity: 0.8,
-                strokeWeight: 2,
-                fillColor: "#FF0000",
-                fillOpacity: 0.35,
-                map,
-                center: {
-                  lat: data.Start_Lat,
-                  lng: data.Start_Lng
-                },
-                radius: 50,
-              });
-              circles.push(cityCircle);
-            }
-          })
-        }
-      })
-      .catch(error => console.error(error));
+    .then(response => {
+      console.log(`success getting API`);
+      console.log(response.data);
+      if (response.data) {
+        let markerPoints = [];
+        accidentPoints = response.data.map((data) => {
+          return {
+            'lat': data.Start_Lat,
+            'lng': data.Start_Lng,
+            'isAccident': !!data.prediction
+          }
+        });
+        console.log('accidentPoints', accidentPoints);
+        response.data.forEach(data => {
+          if (!!data.prediction) {
+            const cityCircle = new google.maps.Circle({
+              strokeColor: "#FF0000",
+              strokeOpacity: 0.8,
+              strokeWeight: 2,
+              fillColor: "#FF0000",
+              fillOpacity: 0.35,
+              map,
+              center: {
+                lat: data.Start_Lat,
+                lng: data.Start_Lng
+              },
+              radius: 50,
+            });
+            circles.push(cityCircle);
+          }
+        })
+      }
+    })
+    .catch(error => console.error(error));
 }
 
 function removeAllCircles() {
@@ -210,37 +211,37 @@ function removeAllCircles() {
   circles = [];
 }
 
-  // Adds a marker to the map and push to the array.
-  function addMarker(location) {
-    const marker = new google.maps.Marker({
-      position: location,
-      map: map,
-    });
-    markers.push(marker);
-  }
+// Adds a marker to the map and push to the array.
+function addMarker(location) {
+  const marker = new google.maps.Marker({
+    position: location,
+    map: map,
+  });
+  markers.push(marker);
+}
 
-  // Sets the map on all markers in the array.
-  function setMapOnAll(map) {
-    for (let i = 0; i < markers.length; i++) {
-      markers[i].setMap(map);
-    }
+// Sets the map on all markers in the array.
+function setMapOnAll(map) {
+  for (let i = 0; i < markers.length; i++) {
+    markers[i].setMap(map);
   }
+}
 
-  // Removes the markers from the map, but keeps them in the array.
-  function clearMarkers() {
-    setMapOnAll(null);
-  }
+// Removes the markers from the map, but keeps them in the array.
+function clearMarkers() {
+  setMapOnAll(null);
+}
 
-  // Shows any markers currently in the array.
-  function showMarkers() {
-    setMapOnAll(map);
-  }
+// Shows any markers currently in the array.
+function showMarkers() {
+  setMapOnAll(map);
+}
 
-  // Deletes all markers in the array by removing references to them.
-  function deleteMarkers() {
-    clearMarkers();
-    markers = [];
-  }
+// Deletes all markers in the array by removing references to them.
+function deleteMarkers() {
+  clearMarkers();
+  markers = [];
+}
 
 
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -271,31 +272,31 @@ function removeAllCircles() {
 //:::                                                                         :::
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-  function distance(lat1, lon1, lat2, lon2, unit) {
-    if ((lat1 == lat2) && (lon1 == lon2)) {
-      return 0;
-    }
-    else {
-      let radlat1 = Math.PI * lat1/180;
-      let radlat2 = Math.PI * lat2/180;
-      let theta = lon1-lon2;
-      let radtheta = Math.PI * theta/180;
-      let dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
-      if (dist > 1) {
-        dist = 1;
-      }
-      dist = Math.acos(dist);
-      dist = dist * 180/Math.PI;
-      dist = dist * 60 * 1.1515;
-      if (unit=="K") { dist = dist * 1.609344 }
-      if (unit=="N") { dist = dist * 0.8684 }
-      return dist;
-    }
+function distance(lat1, lon1, lat2, lon2, unit) {
+  if ((lat1 == lat2) && (lon1 == lon2)) {
+    return 0;
   }
+  else {
+    let radlat1 = Math.PI * lat1 / 180;
+    let radlat2 = Math.PI * lat2 / 180;
+    let theta = lon1 - lon2;
+    let radtheta = Math.PI * theta / 180;
+    let dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+    if (dist > 1) {
+      dist = 1;
+    }
+    dist = Math.acos(dist);
+    dist = dist * 180 / Math.PI;
+    dist = dist * 60 * 1.1515;
+    if (unit == "K") { dist = dist * 1.609344 }
+    if (unit == "N") { dist = dist * 0.8684 }
+    return dist;
+  }
+}
 
 
 $(document).ready(function () {
 
-  
+
 });
 
